@@ -16,8 +16,8 @@ include_directories(include)
 set(SOURCES
     src/main.cpp
     src/ItemDatabase.cpp
-    # src/Game.cpp        # still under construction
-    # src/levels/TavernLevel.cpp  # still under construction
+    src/Game.cpp      
+    # src/levels/TavernLevel.cpp  # under construction, at the moment implemented in levels.h
 )
 
 add_executable(TheGuild ${SOURCES})

@@ -21,7 +21,11 @@ public:
         : name(playerName), x(startX), y(startY), health(10), maxHealth(10), lvl(1),
           purse(10), lockpicking(0), inventory({"Small knife"}){}
     
-
+    // Getters and setters
+    int getX() const { return x; }
+    int getY() const { return y; }
+    void setPosition(int newX, int newY) { x = newX; y = newY; }
+    
     // Damage system
     void takeDamage(int damage) {
         health = std::max(0, health - damage);
