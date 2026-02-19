@@ -44,9 +44,11 @@ The project is in early development with foundational systems being implemented:
 - ✅ CMake build system with C++20 support
 - ✅ Basic project structure and class definitions
 - ✅ Item database system framework
-- 🔄 Core game loop implementation (in progress)
+- ✅ Core game loop implementation
 - 🔄 Player character system (in progress)
 - 🔄 Level and dungeon mechanics (in progress)
+
+**Known Technical Debt:** Platform-specific input handling (`conio.h`), inline Level implementations, and other rapid prototyping decisions documented for future architectural improvements.
 
 ## Building the Project
 
