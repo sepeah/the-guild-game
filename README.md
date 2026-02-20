@@ -2,6 +2,8 @@
 
 A text-based RPG adventure game in the spirit of traditional roguelikes
 
+<img width="1207" height="495" alt="Näyttökuva 2026-02-20 122708" src="https://github.com/user-attachments/assets/b62beb8f-4bd2-4c40-af83-a7a84156c53e" />
+
 ## Project Overview
 
 **Author:** Sepe Ahtosalo (The Left Hand) 
