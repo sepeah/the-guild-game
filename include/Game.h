@@ -23,6 +23,9 @@ private:
     // Input abstraction (for future platform portability)
     char getPlayerInput() { return _getch(); }
     
+    //Clear screen
+    void clearScreen();
+
     // Rendering components
     void renderMap();
     void renderStatusPanel();

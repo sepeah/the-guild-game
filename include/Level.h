@@ -34,19 +34,27 @@ public:
         "###########################",
         "..........................#",
         "#..................#......#",
+        "#.........====.....#......#",
         "#..................#......#",
         "###########################"
     }, "A dimly lit tavern") {}
     
     std::string getRoomDescription(int x, int y) const override {
-        if (x < 19 && x > 0 && y < 4) {
-            return "A cosy tavern, but you get strange looks and the patrons seem unfriendly.";
+        
+        if (x < 14 && x > 9 && y < 3 && y > 1) {
+            return "The counter has a massive barrel on top. \"Two coins for a mug of ale!\", barks the grumpy barkeep.";
         }
-        else if (x > 18 && y < 4) {
+        else if (x < 19 && x > 0) {
+            return "A cosy tavern, but you get strange looks, the patrons seem unfriendly.";
+        }
+        else if (x > 18) {
             return "This seems to be a private area. A scar-faced old man glares at you from the corner.";
         }
-        else {
+        else if(x < 1) {
             return "It's still raining, you REALLY don't want to go out.";
+        }
+        else {
+            return "You find yourself in an unremarkable part of the tavern, with worn wooden floors and flickering candlelight.";
         }
     }
 };

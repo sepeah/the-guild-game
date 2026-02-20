@@ -25,7 +25,10 @@ public:
     int getX() const { return x; }
     int getY() const { return y; }
     void setPosition(int newX, int newY) { x = newX; y = newY; }
-    
+    int getHealth() const {return health; }
+    int getMaxHealth() const {return maxHealth; }
+    std::string getName() const {return name; }
+
     // Damage system
     void takeDamage(int damage) {
         health = std::max(0, health - damage);

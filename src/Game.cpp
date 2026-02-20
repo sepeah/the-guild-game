@@ -2,7 +2,7 @@
 #include "Level.h"
 
 // Constructor - Initialize all game systems
-Game::Game() : player("Clueless Adventurer", 2, 2), gameRunning(true) {
+Game::Game() : player("Clueless Adventurer", 1, 1), gameRunning(true) {
     ItemDatabase::initialize();
     currentLevel = std::make_unique<TavernLevel>();
 }
@@ -16,13 +16,20 @@ void Game::run() {
     }
 }
 
+void Game::clearScreen() {
+    std::cout << "\033[2J\033[H" << std::flush;
+}
+
 void Game::render() {
     // Get player position from Player class
     int px = player.getX();
     int py = player.getY();
     
     // Build entire screen in memory to reduce flickering
-    std::string screen = "\033[2J\033[H";  // Clear screen and move to top
+    std::string screen;
+
+    // Build character info panel using class methods  
+    screen += "\n" + player.getName() +"     Health: " + std::to_string(player.getHealth()) + "/" + std::to_string(player.getMaxHealth()) + "\n\n";
     
     // Build map + player using Level class
     for (int y = 0; y < currentLevel->map.size(); y++) {
@@ -36,14 +43,14 @@ void Game::render() {
     }
     
     // Build status panel using class methods  
-    screen += "\n" + std::string(40, '=') + "\n";
+    screen += "\n" + std::string(80, '=') + "\n";
     screen += currentLevel->getRoomDescription(px, py) + "\n";  // Polymorphic method call
     screen += "POSITION: (" + std::to_string(px) + ", " + std::to_string(py) + ")\n";
-    screen += "HEALTH: 100/100\n";  // TODO: Use player health later
-    screen += std::string(40, '=') + "\n";
+    screen += std::string(80, '=') + "\n";
     screen += "Commands: WASD=Move, Q=Quit\n";
     
-    // Output everything at once
+    // Clear screen and display everything at once
+    clearScreen();
     std::cout << screen << std::flush;
 }
 
