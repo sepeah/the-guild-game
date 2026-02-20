@@ -2,6 +2,8 @@
 
 A text-based RPG adventure game in the spirit of traditional roguelikes
 
+<img width="1207" height="495" alt="Näyttökuva 2026-02-20 122708" src="https://github.com/user-attachments/assets/b62beb8f-4bd2-4c40-af83-a7a84156c53e" />
+
 ## Project Overview
 
 **Author:** Sepe Ahtosalo (The Left Hand) 
@@ -44,9 +46,11 @@ The project is in early development with foundational systems being implemented:
 - ✅ CMake build system with C++20 support
 - ✅ Basic project structure and class definitions
 - ✅ Item database system framework
-- 🔄 Core game loop implementation (in progress)
+- ✅ Core game loop implementation
 - 🔄 Player character system (in progress)
 - 🔄 Level and dungeon mechanics (in progress)
+
+**Known Technical Debt:** Platform-specific input handling (`conio.h`), inline Level implementations, and other rapid prototyping decisions documented for future architectural improvements.
 
 ## Building the Project
 
