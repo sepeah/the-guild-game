@@ -23,17 +23,23 @@ private:
     // Input abstraction (for future platform portability)
     char getPlayerInput() { return _getch(); }
     
-    //Clear screen
+    // Clear screen
     void clearScreen();
+    
+    // Collision detection
+    bool canMoveToPosition(int x, int y);
 
     // Rendering components
     void renderMap();
     void renderStatusPanel();
     std::string buildScreen();
+    std::string statusMessage;
     
 public:
     Game();
     ~Game() = default;
+    void setMessage(const std::string& msg) { statusMessage = msg; }
+    void clearMessage() { statusMessage = ""; }
     
     // Main interface
     void run();

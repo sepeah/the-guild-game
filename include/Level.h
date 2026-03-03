@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
+#include "Entity.h"
 
 /**
  * Base class for all game levels/areas
@@ -13,7 +15,8 @@ class Level {
 public:
     std::vector<std::string> map;
     std::string name;
-
+    std::vector<std::unique_ptr<MapObject>> objects;
+    std::vector<std::unique_ptr<Monster>> monsters;
     Level(std::vector<std::string> levelMap, std::string levelName)
         : map(levelMap), name(levelName) {}
     virtual ~Level() = default;
@@ -37,7 +40,10 @@ public:
         "#.........====.....#......#",
         "#..................#......#",
         "###########################"
-    }, "A dimly lit tavern") {}
+    }, "A dimly lit tavern") {
+    
+    objects.push_back(std::make_unique<Door>(19, 1, false)); // Unlocked door
+    }
     
     std::string getRoomDescription(int x, int y) const override {
         

@@ -34,10 +34,22 @@ void Game::render() {
     // Build map + player using Level class
     for (int y = 0; y < currentLevel->map.size(); y++) {
         for (int x = 0; x < currentLevel->map[y].size(); x++) {
-            if (x == px && y == py)
-                screen += '@';
-            else
-                screen += currentLevel->map[y][x];  // Access Level's map through smart pointer
+            char renderChar = currentLevel->map[y][x];  // Start with map
+            
+            // Check for objects at this position
+            for (const auto& obj : currentLevel->objects) {
+                if (obj->x == x && obj->y == y) {
+                    renderChar = obj->symbol;
+                    break;  // Objects have priority over map
+                }
+            }
+            
+            // Check for player (highest priority)
+            if (x == px && y == py) {
+                renderChar = '@';
+            }
+            
+            screen += renderChar;
         }
         screen += "\n";
     }
@@ -45,6 +57,7 @@ void Game::render() {
     // Build status panel using class methods  
     screen += "\n" + std::string(80, '=') + "\n";
     screen += currentLevel->getRoomDescription(px, py) + "\n";  // Polymorphic method call
+    screen += statusMessage + "\n";  // Display any status messages
     screen += "POSITION: (" + std::to_string(px) + ", " + std::to_string(py) + ")\n";
     screen += std::string(80, '=') + "\n";
     screen += "Commands: WASD=Move, Q=Quit\n";
@@ -55,6 +68,7 @@ void Game::render() {
 }
 
 void Game::handleInput() {
+    clearMessage();
     char c = getPlayerInput();
 
     // Get current player position from Player class
@@ -68,8 +82,16 @@ void Game::handleInput() {
     if (c == 'd') newX++;
     
     // Collision detection. Player moves only to floor "."
-    if (currentLevel->map[newY][newX] == '.') {
+    if (canMoveToPosition(newX, newY)) {
         player.setPosition(newX, newY);
+    } else {
+        // Check if there's an interactive object here
+        for (const auto& obj : currentLevel->objects) {
+            if (obj->x == newX && obj->y == newY) {
+                obj->interact(this);  // Try to interact
+                break;
+            }
+        }
     }
 
     // Quit command
@@ -92,4 +114,23 @@ std::string Game::buildScreen() {
 
 void Game::update() { 
     // TODO: Add game state updates later
+}
+
+bool Game::canMoveToPosition(int x, int y) {
+    // Check map boundaries
+    if (y >= currentLevel->map.size() || x >= currentLevel->map[y].size()) 
+        return false;
+    
+    // Check base map tile
+    if (currentLevel->map[y][x] != '.') 
+        return false;  // Wall, etc.
+    
+    // Check for blocking objects
+    for (const auto& obj : currentLevel->objects) {
+        if (obj->x == x && obj->y == y && obj->blocksMovement()) {
+            return false;
+        }
+    }
+    
+    return true;  // Position is clear
 }
