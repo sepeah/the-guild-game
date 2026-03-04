@@ -29,6 +29,17 @@ public:
     int getMaxHealth() const {return maxHealth; }
     std::string getName() const {return name; }
 
+    // Money system
+    int getPurse() const { return purse; }
+    void addCoins(int amount) { purse += amount; }
+    bool spendCoins(int amount) { 
+        if (purse >= amount) {
+            purse -= amount;
+            return true;  // Transaction successful
+        }
+        return false;  // Not enough money
+    }
+
     // Damage system
     void takeDamage(int damage) {
         health = std::max(0, health - damage);

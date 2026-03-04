@@ -29,7 +29,7 @@ void Game::render() {
     std::string screen;
 
     // Build character info panel using class methods  
-    screen += "\n" + player.getName() +"     Health: " + std::to_string(player.getHealth()) + "/" + std::to_string(player.getMaxHealth()) + "\n\n";
+    screen += "\n" + player.getName() +"     Health: " + std::to_string(player.getHealth()) + "/" + std::to_string(player.getMaxHealth()) + "     Coins: " + std::to_string(player.getPurse()) +"\n\n";
     
     // Build map + player using Level class
     for (int y = 0; y < currentLevel->map.size(); y++) {

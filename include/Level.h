@@ -37,12 +37,16 @@ public:
         "###########################",
         "..........................#",
         "#..................#......#",
-        "#.........====.....#......#",
+        "#..................#......#",
         "#..................#......#",
         "###########################"
     }, "A dimly lit tavern") {
     
     objects.push_back(std::make_unique<Door>(19, 1, false)); // Unlocked door
+    objects.push_back(std::make_unique<Counter>(10, 3));
+    objects.push_back(std::make_unique<Counter>(11, 3));
+    objects.push_back(std::make_unique<Counter>(12, 3));
+    objects.push_back(std::make_unique<Counter>(13, 3));
     }
     
     std::string getRoomDescription(int x, int y) const override {

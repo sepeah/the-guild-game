@@ -52,6 +52,15 @@ public:
     Door(int x, int y, bool locked = false) 
         : MapObject("a door", x, y, '+'), isOpen(false), isLocked(locked) {}
     
-    void interact(Game* game) override;  // Just declaration, no implementation
+    void interact(Game* game) override;  // implementation in Entity.cpp
     bool blocksMovement() const override { return !isOpen; }
+};
+
+class Counter : public MapObject {
+public:
+    Counter(int x, int y) 
+        : MapObject("the bar counter", x, y, '=') {}
+    
+    void interact(Game* game) override;  // implementation in Entity.cpp
+    bool blocksMovement() const override { return true; }
 };

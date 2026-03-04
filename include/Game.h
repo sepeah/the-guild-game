@@ -40,7 +40,8 @@ public:
     ~Game() = default;
     void setMessage(const std::string& msg) { statusMessage = msg; }
     void clearMessage() { statusMessage = ""; }
-    
+    Player& getPlayer() { return player; } 
+
     // Main interface
     void run();
 };
