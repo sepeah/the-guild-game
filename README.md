@@ -2,7 +2,7 @@
 
 A text-based RPG adventure game in the spirit of traditional roguelikes
 
-<img width="1207" height="495" alt="Näyttökuva 2026-02-20 122708" src="https://github.com/user-attachments/assets/b62beb8f-4bd2-4c40-af83-a7a84156c53e" />
+<img width="1392" height="506" alt="Näyttökuva 2026-03-04 110048" src="https://github.com/user-attachments/assets/c66950c2-5677-4f47-a24c-e280ca4ba900" />
 
 ## Project Overview
 
@@ -47,6 +47,7 @@ The project is in early development with foundational systems being implemented:
 - ✅ Basic project structure and class definitions
 - ✅ Item database system framework
 - ✅ Core game loop implementation
+- ✅ Interactive map objects
 - 🔄 Player character system (in progress)
 - 🔄 Level and dungeon mechanics (in progress)
 
@@ -94,11 +95,13 @@ the_guild/
 │   ├── Game.h             # Main game controller
 │   ├── Player.h           # Player character system
 │   ├── Level.h            # Level base class
-│   └── ItemDatabase.h     # Item management system
+│   ├── ItemDatabase.h     # Item management system
+│   └── Entity.h           # Renderables, Monsters, MapObjects
 ├── src/                   # Implementation files
 │   ├── main.cpp           # Application entry point
 │   ├── Game.cpp           # Game logic implementation
 │   ├── ItemDatabase.cpp   # Item system implementation
+│  	├── Entity.cpp         # MapObject interactions implementation
 │   └── levels/            # Level implementations
 │       └── TavernLevel.cpp # Starting tavern area
 ├── assets/                # Game assets
