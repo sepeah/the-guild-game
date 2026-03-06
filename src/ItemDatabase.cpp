@@ -12,7 +12,7 @@ void ItemDatabase::initialize() {
     //            WEAPONS
 
     items["Small knife"] = {
-        .damage = 2,           // 1d4 average damage  
+        .damage = 2, 
         .armorBonus = 0,
         .magic = false,
         .value = 5,

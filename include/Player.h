@@ -13,13 +13,14 @@ private:
 
     int purse;
     int lockpicking;
+    int damagebonus;
     std::vector<std::string> inventory; //simple inventory for now
 
 public:
     // Constructor
     Player(std::string playerName, int startX, int startY)
         : name(playerName), x(startX), y(startY), health(10), maxHealth(10), lvl(1),
-          purse(10), lockpicking(0), inventory({"Small knife"}){}
+          purse(10), damagebonus(0), lockpicking(0), inventory({"Small knife"}){}
     
     // Getters and setters
     int getX() const { return x; }
@@ -27,6 +28,7 @@ public:
     void setPosition(int newX, int newY) { x = newX; y = newY; }
     int getHealth() const {return health; }
     int getMaxHealth() const {return maxHealth; }
+    int getDamage() const { return 2; } // Base damage for now, can be modified by weapons later
     std::string getName() const {return name; }
 
     // Money system

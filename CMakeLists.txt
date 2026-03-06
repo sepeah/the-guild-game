@@ -17,7 +17,8 @@ set(SOURCES
     src/main.cpp
     src/ItemDatabase.cpp
     src/Game.cpp 
-    src/Entity.cpp     
+    src/Entity.cpp
+    src/MonsterDatabase.cpp     
     # src/levels/TavernLevel.cpp  # under construction, at the moment implemented in levels.h
 )
 

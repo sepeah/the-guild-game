@@ -14,14 +14,18 @@ public:
     //int color = 37; //for later use when colors implemented
 };
 
-class Monster : public Renderable {
+class LivingEntity : public Renderable {
 private: 
     int health, damage;
     std::string name;
 public:
-    Monster(std::string Monstername, int startX, int startY, int hp, int dmg, char sym)
-        : Renderable(startX, startY, sym), name(Monstername), health(hp), damage(dmg) {}
+    LivingEntity(std::string entityName, int startX, int startY, int hp, int dmg, char sym)
+        : Renderable(startX, startY, sym), name(entityName), health(hp), damage(dmg) {}
     
+    virtual void interact(Game* game) = 0;
+    virtual bool isHostile() const = 0;
+    virtual bool blocksMovement() const {return true;};
+
     void takeDamage(int damage) { 
         health = std::max(0, health - damage); 
     }
@@ -30,6 +34,24 @@ public:
     std::string getName() const {return name; }
 
     bool isAlive() const { return health > 0; }
+};
+
+class Monster : public LivingEntity {
+public:
+    Monster(std::string monsterName, int startX, int startY, int hp, int dmg, char sym)
+        : LivingEntity(monsterName, startX, startY, hp, dmg, sym) {}
+
+    void interact(Game* game) override; // Combat interaction
+    bool isHostile() const override { return true; }
+};
+
+class NPC : public LivingEntity {
+public:
+    NPC(std::string NPCName, int startX, int startY, int hp, int dmg, char sym)
+        : LivingEntity(NPCName, startX, startY, hp, dmg, sym) {}
+
+    void interact(Game* game) override; // Conversation interaction
+    bool isHostile() const override { return false; }
 };
 
 class MapObject : public Renderable {

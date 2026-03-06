@@ -39,6 +39,7 @@ public:
     Game();
     ~Game() = default;
     void setMessage(const std::string& msg) { statusMessage = msg; }
+    void appendMessage(const std::string& msg) { statusMessage += msg; }   
     void clearMessage() { statusMessage = ""; }
     Player& getPlayer() { return player; } 
 

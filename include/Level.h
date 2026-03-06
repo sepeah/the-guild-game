@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "Entity.h"
+#include "MonsterDatabase.h"
 
 /**
  * Base class for all game levels/areas
@@ -16,7 +17,7 @@ public:
     std::vector<std::string> map;
     std::string name;
     std::vector<std::unique_ptr<MapObject>> objects;
-    std::vector<std::unique_ptr<Monster>> monsters;
+    std::vector<std::unique_ptr<LivingEntity>> livingEntities;
     Level(std::vector<std::string> levelMap, std::string levelName)
         : map(levelMap), name(levelName) {}
     virtual ~Level() = default;
@@ -41,6 +42,14 @@ public:
         "#..................#......#",
         "###########################"
     }, "A dimly lit tavern") {
+    MonsterDatabase::initialize();
+    
+    // Add rats using MonsterDatabase
+    auto ratStats = MonsterDatabase::getStats("rat");
+    livingEntities.push_back(std::make_unique<Monster>("rat", 5, 2, ratStats.health, ratStats.damage, ratStats.symbol));
+    livingEntities.push_back(std::make_unique<Monster>("rat", 15, 3, ratStats.health, ratStats.damage, ratStats.symbol));
+    livingEntities.push_back(std::make_unique<Monster>("black rat", 22, 3, ratStats.health, ratStats.damage, ratStats.symbol));
+    
     
     objects.push_back(std::make_unique<Door>(19, 1, false)); // Unlocked door
     objects.push_back(std::make_unique<Counter>(10, 3));

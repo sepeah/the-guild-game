@@ -4,15 +4,21 @@
 // Constructor - Initialize all game systems
 Game::Game() : player("Clueless Adventurer", 1, 1), gameRunning(true) {
     ItemDatabase::initialize();
+    MonsterDatabase::initialize();
     currentLevel = std::make_unique<TavernLevel>();
 }
 
 // Main game loop
 void Game::run() {
-    while (gameRunning) {
+    while (gameRunning && player.isAlive()) {
         render();
         handleInput();
         // update(); // Added in future iterations for more complex game logic
+    }  // <- Missing this brace
+    
+    if (!player.isAlive()) {
+        clearScreen();
+        std::cout << "Death, the inevitable.\n With a gentle hand She caresses you, and just like that...\n  She stills the beating of your heart,\n   and your consciousness... \n\n\n Press Q to enter oblivion";
     }
 }
 
@@ -31,7 +37,7 @@ void Game::render() {
     // Build character info panel using class methods  
     screen += "\n" + player.getName() +"     Health: " + std::to_string(player.getHealth()) + "/" + std::to_string(player.getMaxHealth()) + "     Coins: " + std::to_string(player.getPurse()) +"\n\n";
     
-    // Build map + player using Level class
+    // Build map + player + renderables using Level class
     for (int y = 0; y < currentLevel->map.size(); y++) {
         for (int x = 0; x < currentLevel->map[y].size(); x++) {
             char renderChar = currentLevel->map[y][x];  // Start with map
@@ -41,6 +47,13 @@ void Game::render() {
                 if (obj->x == x && obj->y == y) {
                     renderChar = obj->symbol;
                     break;  // Objects have priority over map
+                }
+            }
+            // Check for living entitities at this position
+            for (const auto& entity : currentLevel->livingEntities) {
+                if (entity->x == x && entity->y == y) {
+                    renderChar = entity->symbol;
+                    break;  // Entities have priority over map
                 }
             }
             
@@ -85,10 +98,17 @@ void Game::handleInput() {
     if (canMoveToPosition(newX, newY)) {
         player.setPosition(newX, newY);
     } else {
-        // Check if there's an interactive object here
+        // Check for interactive object
         for (const auto& obj : currentLevel->objects) {
             if (obj->x == newX && obj->y == newY) {
                 obj->interact(this);  // Try to interact
+                break;
+            }
+        }
+        // Check for interactive entity
+        for (const auto& entity : currentLevel->livingEntities) {
+            if (entity->x == newX && entity->y == newY) {
+                entity->interact(this);  // Try to interact
                 break;
             }
         }
@@ -118,9 +138,11 @@ void Game::update() {
 
 bool Game::canMoveToPosition(int x, int y) {
     // Check map boundaries
-    if (y >= currentLevel->map.size() || x >= currentLevel->map[y].size()) 
-        return false;
-    
+    if (y < 0 || x < 0 ||
+    y >= static_cast<int>(currentLevel->map.size()) ||
+    x >= static_cast<int>(currentLevel->map[y].size())) {
+    return false;
+    }
     // Check base map tile
     if (currentLevel->map[y][x] != '.') 
         return false;  // Wall, etc.
@@ -131,6 +153,14 @@ bool Game::canMoveToPosition(int x, int y) {
             return false;
         }
     }
+    // Check for blocking entities
+    for (const auto& entity : currentLevel->livingEntities) {
+        if (entity->x == x && entity->y == y && entity->blocksMovement()) {
+            return false;
+        }
+    }
+
+
     
     return true;  // Position is clear
 }
