@@ -1,5 +1,7 @@
 #include "Entity.h"
 #include "Game.h"  // Now we can include the full Game definition
+#include <cmath>
+#include <cstdlib>
 
 void Door::interact(Game* game) {
     if (isLocked) {
@@ -22,6 +24,42 @@ void Counter::interact(Game* game) {
     else {
         game->appendMessage("\"Get out of here, you dog! Come back when you have some coins! \"");
     }
+}
+
+void Monster::takeTurn(Game* game) {
+    // Simple AI
+    if (!isAlive()) return; // Dead monsters do nothing
+    
+    
+    
+    if (isHostile()) {    // aggressive monsters attack player if adjacent
+        Player& player = game->getPlayer();
+        int dx = std::abs(player.getX() - x);
+        int dy = std::abs(player.getY() - y);
+        
+        if ((dx == 1 && dy == 0) || (dx == 0 && dy == 1)) {
+            game->appendMessage("The " + getName() + " attacks! ");
+            interact(game); // Attack player if adjacent
+            return; // Attack instead of moving
+        }
+    }
+    std::pair<int,int> dirs[4] = {
+    {1, 0},
+    {0, 1},
+    {0, -1},
+    {-1, 0}
+    };
+    std::pair<int,int> dir = dirs[std::rand() % 4];
+    int newX = x + dir.first;
+    int newY = y + dir.second;
+
+    if (!game->canEntityMoveToPosition(newX, newY)) {
+        return; // Can't move, so skip turn
+    }
+    x = newX;
+    y = newY;
+
+
 }
 
 void Monster::interact(Game* game) {

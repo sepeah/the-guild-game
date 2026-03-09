@@ -26,6 +26,9 @@ public:
     virtual bool isHostile() const = 0;
     virtual bool blocksMovement() const {return true;};
 
+    virtual void takeTurn(Game* game) {// Default: do nothing - override for entities with AI
+    };
+
     void takeDamage(int damage) { 
         health = std::max(0, health - damage); 
     }
@@ -41,7 +44,8 @@ public:
     Monster(std::string monsterName, int startX, int startY, int hp, int dmg, char sym)
         : LivingEntity(monsterName, startX, startY, hp, dmg, sym) {}
 
-    void interact(Game* game) override; // Combat interaction
+    void interact(Game* game) override; // Combat interaction    
+    void takeTurn(Game* game) override; // AI behavior    
     bool isHostile() const override { return true; }
 };
 
@@ -50,7 +54,8 @@ public:
     NPC(std::string NPCName, int startX, int startY, int hp, int dmg, char sym)
         : LivingEntity(NPCName, startX, startY, hp, dmg, sym) {}
 
-    void interact(Game* game) override; // Conversation interaction
+    void interact(Game* game) override; // Conversation interaction    
+    //void takeTurn(Game* game) override; // AI behavior - NPCs might just stand still    
     bool isHostile() const override { return false; }
 };
 

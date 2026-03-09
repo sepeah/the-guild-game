@@ -13,12 +13,12 @@ void Game::run() {
     while (gameRunning && player.isAlive()) {
         render();
         handleInput();
-        // update(); // Added in future iterations for more complex game logic
-    }  // <- Missing this brace
+        update();
+    }
     
     if (!player.isAlive()) {
         clearScreen();
-        std::cout << "Death, the inevitable.\n With a gentle hand She caresses you, and just like that...\n  She stills the beating of your heart,\n   and your consciousness... \n\n\n Press Q to enter oblivion";
+        std::cout << "\n\n\n    Death, the inevitable.\n     With a gentle hand She caresses you, and just like that...\n      She stills the beating of your heart,\n       and your consciousness... \n\n\n";
     }
 }
 
@@ -118,6 +118,37 @@ void Game::handleInput() {
     if (c == 'q') gameRunning = false;  // Set flag to exit game loop
 }
 
+bool Game::canEntityMoveToPosition(int x, int y) {
+    // Check map boundaries
+    if (y < 0 || x < 0 ||
+    y >= static_cast<int>(currentLevel->map.size()) ||
+    x >= static_cast<int>(currentLevel->map[y].size())) {
+    return false;
+    }
+    // Check base map tile
+    if (currentLevel->map[y][x] != '.') 
+        return false;  // Wall, etc.
+    
+        // Check for player
+    if (player.getX() == x && player.getY() == y) {
+        return false;
+    }
+    // Check for blocking objects
+    for (const auto& obj : currentLevel->objects) {
+        if (obj->x == x && obj->y == y && obj->blocksMovement()) {
+            return false;
+        }
+    }
+    // Check for blocking entities
+    for (const auto& entity : currentLevel->livingEntities) {
+        if (entity->x == x && entity->y == y && entity->blocksMovement()) {
+            return false;
+        }
+    }
+   
+    return true;  // Position is clear
+}   
+
 // stub implementations for next phase of development
 void Game::renderMap() { 
     // TODO: Extract map rendering from render() method later
@@ -133,7 +164,9 @@ std::string Game::buildScreen() {
 }
 
 void Game::update() { 
-    // TODO: Add game state updates later
+    for (const auto& entity : currentLevel->livingEntities) {
+        entity->takeTurn(this);
+    }
 }
 
 bool Game::canMoveToPosition(int x, int y) {
@@ -159,8 +192,6 @@ bool Game::canMoveToPosition(int x, int y) {
             return false;
         }
     }
-
-
-    
+   
     return true;  // Position is clear
 }

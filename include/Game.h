@@ -42,7 +42,7 @@ public:
     void appendMessage(const std::string& msg) { statusMessage += msg; }   
     void clearMessage() { statusMessage = ""; }
     Player& getPlayer() { return player; } 
-
+    bool canEntityMoveToPosition(int x, int y);
     // Main interface
     void run();
 };
