@@ -40,7 +40,11 @@ public:
         "#..................#......#",
         "#..................#......#",
         "#..................#......#",
-        "###########################"
+        "#...############...########",
+        "#..................#       ",
+        "#..................#       ",
+        "#..................#       ",
+        "####################       "
     }, "A dimly lit tavern") {
     MonsterDatabase::initialize();
     
@@ -50,7 +54,7 @@ public:
     livingEntities.push_back(std::make_unique<Monster>("rat", 15, 3, ratStats.health, ratStats.damage, ratStats.symbol));
     livingEntities.push_back(std::make_unique<Monster>("black rat", 22, 3, ratStats.health, ratStats.damage, ratStats.symbol));
     livingEntities.push_back(std::make_unique<Monster>("rat", 3, 2, ratStats.health, ratStats.damage, ratStats.symbol));
-    livingEntities.push_back(std::make_unique<Monster>("rat", 6, 2, ratStats.health, ratStats.damage, ratStats.symbol));
+    livingEntities.push_back(std::make_unique<Monster>("rat", 6, 7, ratStats.health, ratStats.damage, ratStats.symbol));
     
     
     objects.push_back(std::make_unique<Door>(19, 1, false)); // Unlocked door
