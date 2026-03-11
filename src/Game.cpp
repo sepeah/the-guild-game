@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Level.h"
+#include "InventoryUI.h"
 
 // Constructor - Initialize all game systems
 Game::Game() : player("Clueless Adventurer", 1, 1), gameRunning(true) {
@@ -18,12 +19,17 @@ void Game::run() {
     
     if (!player.isAlive()) {
         clearScreen();
-        std::cout << "\n\n\n    Death, the inevitable.\n     With a gentle hand She caresses you, and just like that...\n      She stills the beating of your heart,\n       and your consciousness... \n\n\n";
+        std::cout << "\n\n\n    Death, the inevitable.\n\n      With a gentle hand She caresses you, and just like that...\n       She stills the beating of your heart,\n        and your consciousness... \n\n\n";
     }
 }
 
 void Game::clearScreen() {
     std::cout << "\033[2J\033[H" << std::flush;
+}
+
+void Game::openInventory() {
+        InventoryUI ui(player);
+        appendMessage(ui.run());
 }
 
 void Game::render() {
@@ -73,7 +79,7 @@ void Game::render() {
     screen += statusMessage + "\n";  // Display any status messages
     screen += "POSITION: (" + std::to_string(px) + ", " + std::to_string(py) + ")\n";
     screen += std::string(80, '=') + "\n";
-    screen += "Commands: WASD=Move, Q=Quit\n";
+    screen += "Commands: WASD=Move, I=Inventory, Q=Quit\n";
     
     // Clear screen and display everything at once
     clearScreen();
@@ -83,6 +89,12 @@ void Game::render() {
 void Game::handleInput() {
     clearMessage();
     char c = getPlayerInput();
+
+    // inventory command
+    if (c == 'i') {
+        openInventory();
+        return; // opening the inventory takes a turn, so skip movement and interaction for this input
+    }
 
     // Get current player position from Player class
     int currentX = player.getX(); 
@@ -149,7 +161,7 @@ bool Game::canEntityMoveToPosition(int x, int y) {
     return true;  // Position is clear
 }   
 
-// stub implementations for next phase of development
+// some stub implementations for future development
 void Game::renderMap() { 
     // TODO: Extract map rendering from render() method later
 }

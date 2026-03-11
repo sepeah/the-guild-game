@@ -11,7 +11,7 @@ public:
     
     Renderable(int posX, int posY, char sym) : x(posX), y(posY), symbol(sym) {}
     virtual ~Renderable() = default;
-    //int color = 37; //for later use when colors implemented
+    //int color = 37; //for later use when (or if) colors implemented
 };
 
 class LivingEntity : public Renderable {

@@ -88,6 +88,16 @@ void ItemDatabase::initialize() {
         .mapSymbol = '%'
     };
     
+    items["Mug of Ale"] = {
+        .damage = 1,
+        .armorBonus = 0,
+        .magic = true,
+        .value = 2,
+        .description = "A mug of ale. Smells of barn, but the taste is Divine.",
+        .skillBonuses = {},
+        .mapSymbol = '%'
+    };
+
     items["Rings of The Two Hands"] = {
         .damage = 0,
         .armorBonus = 0,

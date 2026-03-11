@@ -4,6 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <unordered_map>
+#include "ItemDatabase.h"
 
 class Player {
 private:
@@ -45,6 +46,7 @@ public:
     // Inventory system
     void addItem(const std::string& itemId, int quantity = 1) {
         if (quantity <= 0) return;
+        if (!ItemDatabase::exists(itemId)) return; // Don't add unknown items
         inventory[itemId] += quantity;
     }
 

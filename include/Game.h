@@ -45,4 +45,5 @@ public:
     bool canEntityMoveToPosition(int x, int y);
     // Main interface
     void run();
+    void openInventory();
 };

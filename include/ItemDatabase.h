@@ -12,7 +12,7 @@ struct ItemStats {
     int damage = 0;           // Weapon damage (1d4, etc.)
     int armorBonus = 0;       // Protection from damage
     bool magic = false;      // magic items have special effects
-    int value = 0;            // Gold value for buying/selling
+    int value = 0;            // Coin value for buying/selling
     std::string description;  // Flavor text
     // skill bonuses
     std::map<std::string, int> skillBonuses;

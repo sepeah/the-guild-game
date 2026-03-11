@@ -20,6 +20,7 @@ void Counter::interact(Game* game) {
     Player& player = game->getPlayer();
     if (player.spendCoins(2)) {
         game->appendMessage("The barkeep grabs your coins and hands you a mug of ale. ");
+        player.addItem("Mug of Ale", 1);
     } 
     else {
         game->appendMessage("\"Get out of here, you dog! Come back when you have some coins! \"");
