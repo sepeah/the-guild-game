@@ -2,7 +2,11 @@
 
 A text-based RPG adventure game in the spirit of traditional roguelikes
 
-<img width="1392" height="506" alt="Näyttökuva 2026-03-04 110048" src="https://github.com/user-attachments/assets/c66950c2-5677-4f47-a24c-e280ca4ba900" />
+Basic Gameplay UI with map, interaction messages and basic stats. An initial combat system allows Tavern pest control, but has its dangers.
+<img width="1141" height="593" alt="Näyttökuva 2026-03-11 150340" src="https://github.com/user-attachments/assets/5b47ea25-b1e0-4f5b-a57a-47fbbb34935d" />
+
+The inventory has a dedicated UI that displays the player's items and the selected item's description.
+<img width="1144" height="433" alt="Näyttökuva 2026-03-11 150439" src="https://github.com/user-attachments/assets/388c32e6-bebe-49c2-9fdc-8f8fb8a81142" />
 
 ## Project Overview
 
@@ -45,9 +49,9 @@ The project is in early development with foundational systems being implemented:
 
 - ✅ CMake build system with C++20 support
 - ✅ Basic project structure and class definitions
-- ✅ Item database system framework
 - ✅ Core game loop implementation
-- ✅ Interactive map objects
+- ✅ Item database and inventory system with dedicated UI
+- ✅ Renderable entities: interactive map objects, monsters
 - 🔄 Player character system (in progress)
 - 🔄 Level and dungeon mechanics (in progress)
 
@@ -90,23 +94,25 @@ cmake --build . --config Debug
 the_guild/
 ├── CMakeLists.txt          # Build configuration
 ├── README.md               # Project documentation
-├── .gitignore             # Version control exclusions
-├── include/               # Header files
-│   ├── Game.h             # Main game controller
-│   ├── Player.h           # Player character system
-│   ├── Level.h            # Level base class
-│   ├── ItemDatabase.h     # Item management system
-│   └── Entity.h           # Renderables, Monsters, MapObjects
-├── src/                   # Implementation files
-│   ├── main.cpp           # Application entry point
-│   ├── Game.cpp           # Game logic implementation
-│   ├── ItemDatabase.cpp   # Item system implementation
-│  	├── Entity.cpp         # MapObject interactions implementation
-│   └── levels/            # Level implementations
-│       └── TavernLevel.cpp # Starting tavern area
-├── assets/                # Game assets
-├── docs/                  # Additional documentation
-└── build/                 # Generated build files (gitignored)
+├── .gitignore              # Version control exclusions
+├── include/                # Header files
+│   ├── Game.h              # Main game controller
+│   ├── Player.h            # Player character system
+│   ├── Level.h             # Level base class
+│   ├── ItemDatabase.h      # Item management system
+│   ├── Entity.h            # Renderables, Monsters, MapObjects
+│   └── InventoryUI.h       # The inventory screen and controls
+├── src/                    # Implementation files
+│   ├── main.cpp            # Application entry point
+│   ├── Game.cpp            # Game logic implementation
+│   ├── ItemDatabase.cpp    # Item system implementation
+│  	├── Entity.cpp          # MapObject interactions implementation
+│   ├── InventoryUI.cpp     # Inventory screen implementation
+│   └── levels/             # Level implementations (currently inlined in Level.h)
+│       └── TavernLevel.cpp # Starting tavern area  (currently inlined in Level.h)
+├── assets/                 # Game assets
+├── docs/                   # Additional documentation
+└── build/                  # Generated build files (gitignored)
 ```
 
 ## Development Philosophy
@@ -123,6 +129,7 @@ This is primarily a learning project, but suggestions and educational discussion
 - Review code architecture and suggest improvements
 - Propose learning exercises or challenges
 - Share resources about game development or modern C++
+- Test the game, at the moment that means: buy ale and kill rats in the tavern
 
 ## License
 
