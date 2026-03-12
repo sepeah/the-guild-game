@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <algorithm>
+#include "ItemDatabase.h"
 
 class Game; //Forward declaration for interaction methods
 
@@ -67,8 +68,26 @@ public:
         : Renderable(startX, startY, sym), name(Objectname) {}
 
     virtual void interact(Game* game) = 0; // Pure virtual for interaction
+    virtual void onEnterTile(Game* game) {}; // Optional override for when player steps on tile
     virtual bool blocksMovement() const = 0;
+    virtual bool shouldRemove() const { return false; }
     std::string getName() const { return name; }
+};
+
+class GroundItem : public MapObject {
+private:
+    std::string itemId;
+    int quantity;
+    bool pickedUp;
+public:
+    GroundItem(const std::string& id, int x, int y, int amount = 1)
+        : MapObject(id, x, y, ItemDatabase::getStats(id).mapSymbol),
+          itemId(id), quantity(std::max(1, amount)), pickedUp(false) {}
+
+    void interact(Game* game) override;
+    void onEnterTile(Game* game) override;
+    bool blocksMovement() const override { return false; }
+    bool shouldRemove() const override { return pickedUp; }
 };
 
 class Door : public MapObject {
@@ -80,6 +99,7 @@ public:
         : MapObject("a door", x, y, '+'), isOpen(false), isLocked(locked) {}
     
     void interact(Game* game) override;  // implementation in Entity.cpp
+    void onEnterTile(Game* game) override;
     bool blocksMovement() const override { return !isOpen; }
 };
 

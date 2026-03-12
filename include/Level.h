@@ -62,6 +62,7 @@ public:
     objects.push_back(std::make_unique<Counter>(11, 3));
     objects.push_back(std::make_unique<Counter>(12, 3));
     objects.push_back(std::make_unique<Counter>(13, 3));
+    objects.push_back(std::make_unique<GroundItem>("Bread", 4, 4));
     }
     
     std::string getRoomDescription(int x, int y) const override {

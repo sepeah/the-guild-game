@@ -79,7 +79,7 @@ void Game::render() {
     screen += statusMessage + "\n";  // Display any status messages
     screen += "POSITION: (" + std::to_string(px) + ", " + std::to_string(py) + ")\n";
     screen += std::string(80, '=') + "\n";
-    screen += "Commands: WASD=Move, I=Inventory, Q=Quit\n";
+    screen += "Commands: WASD=Move, I=Inventory, ,=Pick Up, Q=Quit\n";
     
     // Clear screen and display everything at once
     clearScreen();
@@ -95,7 +95,17 @@ void Game::handleInput() {
         openInventory();
         return; // opening the inventory takes a turn, so skip movement and interaction for this input
     }
-
+    // pick up command
+    if (c == ',') {
+        for (const auto& obj : currentLevel->objects) {
+            if (obj->x == player.getX() && obj->y == player.getY()) {
+                if (auto* item = dynamic_cast<GroundItem*>(obj.get())) {
+                    item->interact(this);  // Try to interact
+            }
+            }
+        }
+            return; // picking up takes a turn, so skip movement for this input
+    }
     // Get current player position from Player class
     int currentX = player.getX(); 
     int currentY = player.getY();
@@ -179,6 +189,17 @@ void Game::update() {
     for (const auto& entity : currentLevel->livingEntities) {
         entity->takeTurn(this);
     }
+
+    // Resolve interactions for non-blocking objects on the player's tile (for example floor items).
+    for (const auto& obj : currentLevel->objects) {
+        if (obj->x == player.getX() && obj->y == player.getY() && !obj->blocksMovement()) {
+            obj->onEnterTile(this);
+        }
+    }
+
+    std::erase_if(currentLevel->objects, [](const std::unique_ptr<MapObject>& obj) {
+        return obj->shouldRemove();
+    });
 }
 
 bool Game::canMoveToPosition(int x, int y) {

@@ -21,6 +21,7 @@ void InventoryUI::render() const {
 
     // Build inventory screen in memory first
     std::string inventoryScreen;
+	std::string quantityprompt;
   
     inventoryScreen += 
     "\n  " + player.getName() +"     Inventory.    \n\n" 
@@ -46,6 +47,7 @@ void InventoryUI::render() const {
     }
     inventoryScreen += "\n" + std::string(80, '-') + "\n";
     inventoryScreen += getSelectedItemDescription() + "\n";
+	// not sure if needed: inventoryScreen += quantityprompt;
     std::cout << "\033[2J\033[H" << std::flush;
     std::cout << inventoryScreen << std::flush;
 }
@@ -53,7 +55,6 @@ void InventoryUI::render() const {
 char InventoryUI::readKey() const {
 	return static_cast<char>(_getch());
 }
-
 bool InventoryUI::isEscapeKey(char key) const {
 	return key == 27;
 }
@@ -139,11 +140,27 @@ void InventoryUI::dropSelectedItem() {
 	if (!hasSelection()) {
 		pendingMessage = "No item selected.";
 		return;
+	} else {
+		int quantity = 1;
+		const std::string itemId = getSelectedItemId();
+		int max = player.getItemCount(itemId);
+		if (max > 1) {
+			std::cout << "Quantity to drop: " << std::endl;
+			std::cin >> quantity;
+			if (quantity<1 || quantity > max) {
+				pendingMessage = "Enter stupid numbers, drop no stupid items.";
+				return;
+			}
+		}
+		player.removeItem(itemId, quantity);
+		pendingMessage = "You drop ";
+		if (quantity > 1) {
+			pendingMessage += std::to_string(quantity) + " ";
+		}
+		pendingMessage += itemId + ". ";
+		
 	}
-
-	pendingMessage = "Drop action not implemented yet for " + getSelectedItemId() + ".";
 }
-
 void InventoryUI::wieldWearSelectedItem() {
 	// TODO: Check stats and equip if valid (damage => wield, armorBonus => wear).
 	if (!hasSelection()) {

@@ -3,6 +3,36 @@
 #include <cmath>
 #include <cstdlib>
 
+void GroundItem::onEnterTile(Game* game) {
+    std::string message = "";
+    if (quantity > 1) {
+        message += std::to_string(quantity) + "x ";
+    }
+    message += itemId + ". ";
+    game->appendMessage(message);
+}
+
+void GroundItem::interact(Game* game) {
+    if (pickedUp) {
+        return;
+    }
+
+    Player& player = game->getPlayer();
+    player.addItem(itemId, quantity);
+
+    std::string message = "You pick up ";
+    if (quantity == 1) {
+        message += "the ";
+    }
+    if (quantity > 1) {
+        message += std::to_string(quantity) + "x ";
+    }
+    message += itemId + ". ";
+
+    game->appendMessage(message);
+    pickedUp = true;
+}
+
 void Door::interact(Game* game) {
     if (isLocked) {
         game->appendMessage("The door is locked. ");
@@ -11,8 +41,17 @@ void Door::interact(Game* game) {
         symbol = '/';
         game->appendMessage("You open the door. ");
     } else {
-        game->appendMessage("The door is already open. ");
+        game->appendMessage("Something is wrong with this door. ");
     }
+}
+void Door::onEnterTile(Game* game) {
+    if (isOpen) {
+        game->appendMessage("An open door. Press C to close. ");
+    }
+    else {
+        game->appendMessage("A closed door");
+
+    }    
 }
 
 
