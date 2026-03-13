@@ -5,9 +5,9 @@
 #include "Player.h"
 
 class InventoryUI {
+struct InventoryResult;
 private:
     Player& player;
-
     // Snapshot of inventory item IDs shown in the current screen order.
     std::vector<std::string> orderedItems;
     // Cursor position in orderedItems.
@@ -37,16 +37,22 @@ private:
     void moveSelectionDown();
 
     // Handle action keys (u/d/w and optional navigation); returns true if handled.
-    bool handleActionKey(char key);
+    InventoryResult handleActionKey(char key);
     // Use the selected item (eat, drink, read, etc.) if applicable.
-    void useSelectedItem();
+    InventoryResult useSelectedItem();
     // Drop one instance of the selected item.
-    void dropSelectedItem();
+    InventoryResult dropSelectedItem();
     // Wield/wear selected item based on its stats (damage/armor).
-    void wieldWearSelectedItem();
+    InventoryResult wieldWearSelectedItem();
 
 public:
     InventoryUI(Player& p) : player(p) {}
-    // Open modal inventory loop and return final action message for the game UI.
-    std::string run();
+    // Open modal inventory loop and return result for the game UI.
+    struct InventoryResult {
+        std::string message;
+        std::string actionType;
+        int quantity;
+        std::string itemId;
+    };
+    InventoryResult run();
 };

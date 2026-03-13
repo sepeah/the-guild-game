@@ -29,7 +29,17 @@ void Game::clearScreen() {
 
 void Game::openInventory() {
         InventoryUI ui(player);
-        appendMessage(ui.run());
+        InventoryUI::InventoryResult result = ui.run();
+        appendMessage(result.message);
+
+        if (result.actionType == "drop" && result.quantity > 0 && !result.itemId.empty()) {
+            currentLevel->objects.push_back(std::make_unique<GroundItem>(
+                result.itemId,
+                player.getX(),
+                player.getY(),
+                result.quantity
+            ));
+        }
 }
 
 void Game::render() {

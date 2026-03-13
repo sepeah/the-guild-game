@@ -40,6 +40,7 @@ public:
     ~Game() = default;
     void setMessage(const std::string& msg) { statusMessage = msg; }
     void appendMessage(const std::string& msg) { statusMessage += msg; }   
+    void prependMessage(const std::string& msg) {statusMessage = msg + statusMessage; }
     void clearMessage() { statusMessage = ""; }
     Player& getPlayer() { return player; } 
     bool canEntityMoveToPosition(int x, int y);

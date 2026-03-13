@@ -21,7 +21,6 @@ void InventoryUI::render() const {
 
     // Build inventory screen in memory first
     std::string inventoryScreen;
-	std::string quantityprompt;
   
     inventoryScreen += 
     "\n  " + player.getName() +"     Inventory.    \n\n" 
@@ -47,7 +46,6 @@ void InventoryUI::render() const {
     }
     inventoryScreen += "\n" + std::string(80, '-') + "\n";
     inventoryScreen += getSelectedItemDescription() + "\n";
-	// not sure if needed: inventoryScreen += quantityprompt;
     std::cout << "\033[2J\033[H" << std::flush;
     std::cout << inventoryScreen << std::flush;
 }
@@ -103,75 +101,77 @@ void InventoryUI::moveSelectionDown() {
 	}
 }
 
-bool InventoryUI::handleActionKey(char key) {
+InventoryUI::InventoryResult InventoryUI::handleActionKey(char key) {
 	switch (key) {
         case 'k':
             moveSelectionUp();
-            return false;  // navigation isn't an action, does not exit inventory
+            return InventoryResult{"","none",0,""};  // navigation isn't an action, does not exit inventory
         case 'j':
             moveSelectionDown();
-            return false;
+            return InventoryResult{"","none",0,""};  // navigation isn't an action, does not exit inventory
 		case 'u':
-			useSelectedItem();
-			return true;
+			return useSelectedItem();
 		case 'd':
-			dropSelectedItem();
-			return true;
+			return dropSelectedItem();
 		case 'w':
-			wieldWearSelectedItem();
-			return true;
+			return wieldWearSelectedItem();
 		default:
-			return false;
+			return InventoryResult{"","none",0,""};
 	}
 }
 
-void InventoryUI::useSelectedItem() {
+InventoryUI::InventoryResult InventoryUI::useSelectedItem() {
 	// TODO: Implement item use effects.
 	if (!hasSelection()) {
-		pendingMessage = "No item selected.";
-		return;
+		return InventoryResult{"No item selected.", "none", 0, ""};
 	}
 
-	pendingMessage = "Use action not implemented yet for " + getSelectedItemId() + ".";
+	const std::string itemId = getSelectedItemId();
+	return InventoryResult{"Use action not implemented yet for " + itemId + ".", "use", 0, itemId};
 }
 
-void InventoryUI::dropSelectedItem() {
-	// TODO: Remove one item and set a message.
+InventoryUI::InventoryResult InventoryUI::dropSelectedItem() {
 	if (!hasSelection()) {
-		pendingMessage = "No item selected.";
-		return;
-	} else {
-		int quantity = 1;
-		const std::string itemId = getSelectedItemId();
-		int max = player.getItemCount(itemId);
-		if (max > 1) {
-			std::cout << "Quantity to drop: " << std::endl;
-			std::cin >> quantity;
-			if (quantity<1 || quantity > max) {
-				pendingMessage = "Enter stupid numbers, drop no stupid items.";
-				return;
-			}
-		}
-		player.removeItem(itemId, quantity);
-		pendingMessage = "You drop ";
-		if (quantity > 1) {
-			pendingMessage += std::to_string(quantity) + " ";
-		}
-		pendingMessage += itemId + ". ";
-		
+		return InventoryResult{"No item selected.", "none", 0, ""};
 	}
+
+	int quantity = 1;
+	const std::string itemId = getSelectedItemId();
+	const int max = player.getItemCount(itemId);
+
+	if (max > 1) {
+		std::cout << "Quantity to drop: " << std::endl;
+		std::cin >> quantity;
+		if (quantity < 1 || quantity > max) {
+			return InventoryResult{"Enter stupid numbers, drop no stupid items.", "none", 0, ""};
+		}
+	}
+
+	if (!player.removeItem(itemId, quantity)) {
+		return InventoryResult{"Could not drop item.", "none", 0, ""};
+	}
+
+	std::string message = "You drop ";
+	if (quantity > 1) {
+		message += std::to_string(quantity) + "x ";
+	}
+	message += itemId + ". ";
+
+	return InventoryResult{message, "drop", quantity, itemId};
 }
-void InventoryUI::wieldWearSelectedItem() {
+
+InventoryUI::InventoryResult InventoryUI::wieldWearSelectedItem() {
 	// TODO: Check stats and equip if valid (damage => wield, armorBonus => wear).
 	if (!hasSelection()) {
-		pendingMessage = "No item selected.";
-		return;
+		return InventoryResult{"No item selected.", "none", 0, ""};
 	}
 
-	pendingMessage = "Wield/Wear action not implemented yet for " + getSelectedItemId() + ".";
+	const std::string itemId = getSelectedItemId();
+	return InventoryResult{"Wield/Wear action not implemented yet for " + itemId + ".", "wield", 0, itemId};
 }
 
-std::string InventoryUI::run() {
+InventoryUI::InventoryResult InventoryUI::run() {
+	InventoryResult result{"You check your inventory.", "none", 0, ""};
     pendingMessage.clear();
     rebuildItemList();
     while (true) {
@@ -180,10 +180,11 @@ std::string InventoryUI::run() {
         if (isEscapeKey(key)) {
             break;
         }
-        if (handleActionKey(key)) break;
+        InventoryResult action = handleActionKey(key);
+        if (action.actionType != "none") {
+            result = action;
+            break;
+        }
     }
-    if (pendingMessage.empty()) {
-        return "You check your inventory.";
-    }
-    return pendingMessage;
+    return result;
 }

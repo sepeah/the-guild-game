@@ -9,7 +9,7 @@ void GroundItem::onEnterTile(Game* game) {
         message += std::to_string(quantity) + "x ";
     }
     message += itemId + ". ";
-    game->appendMessage(message);
+    game->prependMessage(message);
 }
 
 void GroundItem::interact(Game* game) {
@@ -46,10 +46,10 @@ void Door::interact(Game* game) {
 }
 void Door::onEnterTile(Game* game) {
     if (isOpen) {
-        game->appendMessage("An open door. Press C to close. ");
+        game->prependMessage("An open door. Press C to close. ");
     }
     else {
-        game->appendMessage("A closed door");
+        game->prependMessage("A closed door");
 
     }    
 }
