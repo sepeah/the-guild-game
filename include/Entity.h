@@ -90,6 +90,25 @@ public:
     bool shouldRemove() const override { return pickedUp; }
 };
 
+class Corpse : public MapObject {
+private:
+    std::string sourceMonsterId;
+    std::string sourceMonsterName;
+
+public:
+    Corpse(const std::string& monsterId, const std::string& monsterName, int x, int y)
+        : MapObject("corpse", x, y, '%'),
+          sourceMonsterId(monsterId),
+          sourceMonsterName(monsterName) {}
+
+    void interact(Game* game) override;
+    void onEnterTile(Game* game) override;
+    bool blocksMovement() const override { return false; }
+
+    const std::string& getSourceMonsterId() const { return sourceMonsterId; }
+    const std::string& getSourceMonsterName() const { return sourceMonsterName; }
+}; 
+
 class Door : public MapObject {
 private:
     bool isOpen;
