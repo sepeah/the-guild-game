@@ -150,6 +150,10 @@ void Game::handleInput() {
     if (c == 'q') gameRunning = false;  // Set flag to exit game loop
 }
 
+void Game::spawnObject(std::unique_ptr<MapObject> obj) {
+   currentLevel->objects.push_back(std::move(obj));
+}
+
 bool Game::canEntityMoveToPosition(int x, int y) {
     // Check map boundaries
     if (y < 0 || x < 0 ||
@@ -210,6 +214,10 @@ void Game::update() {
     std::erase_if(currentLevel->objects, [](const std::unique_ptr<MapObject>& obj) {
         return obj->shouldRemove();
     });
+    std::erase_if(currentLevel->livingEntities, [](const std::unique_ptr<LivingEntity>& ent) {
+    return !ent->isAlive();
+});
+    
 }
 
 bool Game::canMoveToPosition(int x, int y) {

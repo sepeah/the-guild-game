@@ -10,7 +10,18 @@ void MonsterDatabase::initialize() {
         .health = 4,
         .damage = 2,
         .symbol = 'r',
-        .description = "A dirty rat"
+        .description = "A dirty rat",
+        .leavesCorpse = true,
+        .requiresMagic = false
+    };
+    
+    monsters["ghost of the cursed rat"] = {
+        .health = 4,
+        .damage = 3,
+        .symbol = 'g',
+        .description = "A dirty ghost",
+        .leavesCorpse = false,
+        .requiresMagic = true
     };
     
     // Future monsters here
@@ -27,7 +38,7 @@ MonsterStats MonsterDatabase::getStats(const std::string& monsterName) {
     }
     
     // Return default stats for unknown items
-    return MonsterStats{0, 0, '?', "Unknown creature"};
+    return MonsterStats{0, 0, '?', "Unknown creature", false};
 }
 
 bool MonsterDatabase::exists(const std::string& monsterName) {

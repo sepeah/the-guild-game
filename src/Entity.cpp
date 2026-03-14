@@ -112,6 +112,7 @@ void Monster::interact(Game* game) {
     game->appendMessage("You hit the " + getName() + " for " + std::to_string(player.getDamage()) + " damage! ");
     if (!isAlive()) {
         game->appendMessage("The " + getName() + " dies! ");
+        game->spawnObject(std::make_unique<Corpse>(getName(), getName(), x, y));
         return;
     }
     if (isAlive()) {
@@ -124,3 +125,10 @@ void NPC::interact(Game* game) {
     game->appendMessage("The " + getName() + " looks at you expectantly. ");
 }
 
+void Corpse::interact(Game* game) {
+    game->appendMessage("The earthly remains of the " + sourceMonsterName + " lie here. ");
+}
+
+void Corpse::onEnterTile(Game* game) {
+    game->prependMessage("A corpse of " + sourceMonsterName + ". ");
+}

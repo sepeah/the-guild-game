@@ -47,4 +47,5 @@ public:
     // Main interface
     void run();
     void openInventory();
+    void spawnObject(std::unique_ptr<MapObject> obj);
 };

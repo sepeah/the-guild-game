@@ -8,6 +8,8 @@ struct MonsterStats {
     int damage;
     char symbol;
     std::string description;
+    bool leavesCorpse;
+    bool requiresMagic;
 };
 
 class MonsterDatabase {
